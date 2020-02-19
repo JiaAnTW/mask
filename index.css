@@ -231,6 +231,7 @@ table{
     height: 100vh;
     background-color: rgba(0,0,0,0.4);
     z-index: 0;
+    display: none;
 }
 
 .content-header{
@@ -241,7 +242,8 @@ table{
 .content-box{
     background-color: white;
     padding: 20px 20px;
-    border-radius: 5px;   
+    border-radius: 5px;
+    max-width: 350px;
 }
 
 .option-area2{
