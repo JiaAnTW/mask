@@ -11,6 +11,22 @@ var beforeBound=null
 var dt = new Date();
 var nowPoint=null
 
+nowPoint=[L.circleMarker([0, 0],{
+    radius: 20,
+    fillColor: '#212529',
+    color: '#212529',
+    opacity: 1,
+    fillOpacity: 0.8
+}),L.circleMarker([0, 0],{
+    radius: 10,
+    fillColor: '#212529',
+    color: '#212529',
+    opacity: 1,
+    fillOpacity: 0.8
+})]
+nowPoint[0].addTo(myMap)
+nowPoint[1].addTo(myMap)
+
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 40,
     //attribution: 'Map data: © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: © <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
@@ -75,6 +91,7 @@ function getLocation() {
             nowPoint[1].addTo(myMap)
       });
     } else {
+
     }
 }
 getLocation()
@@ -269,7 +286,7 @@ function getData(){
         //請求前的處理
         },
         success: function(data) {
-            beforeBound=myMap.getBounds()
+            
             data["features"].forEach((Element,Index)=>{
                     //myMap.setCenter(test)
                     if(Element["properties"]["note"].indexOf("號")!=-1)
