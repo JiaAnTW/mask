@@ -247,10 +247,9 @@ const handleClick=(Element)=>{
 }
 
 const checkIsInZoom=()=>{
-    if(myMap.getZoom()>12){
-        markerList.forEach((Element,Index)=>{
-        //myMap.setCenter(test)
-            if(myMap.getBounds().contains(Element.getLatLng())){
+    markerList.forEach((Element,Index)=>{
+        //myMap.setCenter(test)if(myMap.getZoom()>12){
+            if(myMap.getZoom()>12 && myMap.getBounds().contains(Element.getLatLng())){
                 if(!beforeBound.contains(Element.getLatLng())||beforeBound==null)
                     Element.addTo(myMap)
             }
@@ -258,7 +257,6 @@ const checkIsInZoom=()=>{
                 myMap.removeLayer(Element)
             }      
         })
-    }
     beforeBound=myMap.getBounds()
 }
 
