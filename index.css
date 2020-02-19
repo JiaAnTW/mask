@@ -46,7 +46,7 @@ html,.card,.info-area span,.btn-bot,table,.modal-title{
     max-width: 100vw;
     bottom: 0;
     margin-bottom: 0;
-    z-index: 1;
+    z-index: 2;
     display: none;
 }
 
@@ -85,9 +85,8 @@ html,.card,.info-area span,.btn-bot,table,.modal-title{
 }
 
 
-#OMap{
+#mapid{
     position: absolute;
-    visibility: hidden;
     top:0;
     left: 0;
     width: 100vw;
@@ -98,17 +97,26 @@ html,.card,.info-area span,.btn-bot,table,.modal-title{
 
 .option-area{
     position: absolute;
-    right: 0;
-    bottom: 0;
-    height: 50vh;
-    width: 150px;
-    border: 1px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    right: 20px;
+    bottom: 70px;
+    height: 60px;
+    border-radius: 150px;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,0.2);
+    width: 60px;
+    outline: none;
+}
+
+.option-area:focus{
+    outline: none;
 }
 
 .info-area{
     position: absolute;
-    top: 0;
-    right: 0;
+    bottom: 0;
     height: 50px;
     max-width: 100vw;
     align-items: center;
@@ -170,4 +178,40 @@ table{
 
 .btn-info.focus, .btn-info:focus,.btn-info.active, .btn-info:active  {
     box-shadow: none;
+}
+
+#staright-line{
+    height: 30px;
+    position: absolute;
+    width: 2px;
+    border-radius: 5px;
+    background-color: rgb(242,153,75);
+}
+
+#line{
+    height: 1.5px;
+    position: absolute;
+    width: 30px;
+    border-radius: 5px;
+    background-color: rgb(242,153,75);
+}
+
+#circle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 22px;
+    z-index: 1;
+    height: 22px;
+    background-color: white;
+    border-radius: 100%;
+    border: 2px solid rgb(242,153,75);
+}
+
+#circle-in{
+    width: 50%;
+    height: 50%;
+    border-radius: 100%;
+    background-color: rgb(242,153,75);
 }
