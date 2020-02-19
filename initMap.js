@@ -8,7 +8,7 @@ var nowPoint=null
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 40,
-    attribution: 'Map data: © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: © <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    //attribution: 'Map data: © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: © <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
 }).addTo(myMap);
 
 var blueIcon = L.icon({
@@ -91,6 +91,20 @@ const closeCard=()=>{
 
 const openGoogleMap=()=>{
     window.open(document.getElementsByClassName("btn-bot")[1].value, '_blank');
+}
+
+$(".shade").hide()
+
+const closeModal=()=>{
+    
+    $(".shade").fadeOut("slow",()=>{
+        document.getElementsByClassName("shade")[0].style.zIndex=0
+    })
+}
+document.getElementsByClassName("shade")[0].addEventListener("click",closeModal)
+const openModal=()=>{
+    document.getElementsByClassName("shade")[0].style.zIndex=5
+    $(".shade").fadeIn("slow")
 }
 
 function getData(){
@@ -241,14 +255,14 @@ function getData(){
                     
 
 
-                    if(Index==Math.floor(data["features"].length/2))
+                    /*if(Index==Math.floor(data["features"].length/2))
                         $("#load-topic-1").fadeOut( "fast",function(){
                             $("#load-topic-2").fadeIn("fast")
                         })
                     if(Index==data["features"].length-1){
                         $("#load").hide()
                         document.getElementById("mapid").style.visibility="visible";
-                    }
+                    }*/
             })
         },
         complete: function() {
