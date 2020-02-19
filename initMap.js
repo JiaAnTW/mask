@@ -3,6 +3,7 @@ var myMap = L.map('mapid', {
     zoom: 14
 });
 
+var dt = new Date();
 var nowPoint=null
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -50,7 +51,7 @@ function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position)=>{
             centerPoint=[position.coords.latitude, position.coords.longitude]
-            myMap.setView([position.coords.latitude, position.coords.longitude],18);
+            myMap.setView([position.coords.latitude, position.coords.longitude],15);
             nowPoint=[L.circleMarker([position.coords.latitude, position.coords.longitude],{
                 radius: 20,
                 fillColor: '#212529',
@@ -104,7 +105,10 @@ function getData(){
         success: function(data) {
             const handleClick=(Element)=>{
                 if(nowPoint==null){
-                    myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],18);
+                    if(window.innerWidth<674)
+                        myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],18);
+                    else
+                        myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],18);
                     nowPoint=[L.circleMarker([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],{
                         radius: 20,
                         fillColor: 'rgb(242,153,75)',
@@ -123,11 +127,14 @@ function getData(){
                 }
                 nowPoint[0].setLatLng(new L.LatLng(Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]))
                 nowPoint[1].setLatLng(new L.LatLng(Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]))
+                if(window.innerWidth<674)
+                    myMap.panTo(new L.LatLng(Element["geometry"]["coordinates"][1]-0.005, Element["geometry"]["coordinates"][0]))
+                else
                 myMap.panTo(new L.LatLng(Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]))
                 const handlePointChange=()=>{
                     document.getElementsByClassName("card-title")[0].textContent=Element["properties"]["name"];
                     document.getElementsByClassName("card-subtitle")[0].textContent=Element["properties"]["address"];
-                    var realNote=""
+                    /*let realNote=""
                     if(Element["properties"]["note"]!="-"){
                     for(let i=0;i<Element["properties"]["note"].length;++i){
                             if((Element["properties"]["note"][i]>="0" && Element["properties"]["note"][i]<="9")
@@ -136,15 +143,15 @@ function getData(){
                             else
                                 realNote+=  Element["properties"]["note"][i]
                         }
-                    }
+                    }*/
 
-                    document.getElementsByClassName("card-text")[0].innerHTML=realNote
+                    document.getElementsByClassName("card-text")[0].innerHTML=Element["properties"]["note"]
                     document.getElementsByClassName("btn-bot")[1].value = "https://www.google.com/maps/search/?api=1&query="+Element["properties"]["county"]+Element["properties"]["name"];
                     document.getElementById("tel").textContent=Element["properties"]["phone"];
 
-                    var dt = new Date();
-                    var week= dt.getDay()==0?6:dt.getDay()-1
-                    var hour=1
+                    
+                    let week= dt.getDay()==0?6:dt.getDay()-1
+                    let hour=1
                     if(dt.getHours()<=12)
                         hour=0
                     else if(dt.getHours()>17)
@@ -183,27 +190,36 @@ function getData(){
                     
                     document.getElementsByClassName("modal-title")[0].textContent=Element["properties"]["name"]+" 的營業時間如下";
                     for(let j=0;j<3;++j){
-                        var code=""
+                        let code=[]
                         if(j==0)
-                            code+="<td>早上</td>"
+                            code.push("<td>早上</td>")
                         else if(j==1)
-                            code+="<td>下午</td>"
+                            code.push("<td>下午</td>")
                         else
-                            code+="<td>晚上</td>"
+                            code.push("<td>晚上</td>")
+                        document.getElementsByClassName("time")[j].innerHTML=code.join("")
                         for(let i=0;i<7;++i){
-                            if(Element["properties"]["service_periods"][j*7+i]=="N")
-                                code+='<td style="color:rgb(41,171,164);">○</td>'
-                            else
-                                code+='<td style="color:#ef5285;">╳</td>'   
+                            if(Element["properties"]["service_periods"][j*7+i]=="N"){
+                                let child = document.createElement('td');
+                                child.innerHTML = "○";
+                                child.style.color="rgb(41,171,164)"
+                                document.getElementsByClassName("time")[j].appendChild(child);
+                            }
+                            else{
+                                let child = document.createElement('td');
+                                child.innerHTML = "╳";
+                                child.style.color="#ef5285"
+                                document.getElementsByClassName("time")[j].appendChild(child);
+                            }
                         }
-                        document.getElementsByClassName("time")[j].innerHTML=code
+                        
                     }
                 }
                 
                  
                 $(".card-body").show(()=>{
                     if(window.innerWidth<674)
-                    document.getElementsByClassName("option-area")[0].style.bottom="350px";
+                        document.getElementsByClassName("option-area")[0].style.bottom="350px";
                 })
                 handlePointChange()
 

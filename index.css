@@ -215,3 +215,7 @@ table{
     border-radius: 100%;
     background-color: rgb(242,153,75);
 }
+
+.modal-content{
+    z-index: 15;
+}
