@@ -74,21 +74,8 @@ function getLocation() {
       navigator.geolocation.getCurrentPosition((position)=>{
             centerPoint=[position.coords.latitude, position.coords.longitude]
             myMap.setView([position.coords.latitude, position.coords.longitude],15);
-            nowPoint=[L.circleMarker([position.coords.latitude, position.coords.longitude],{
-                radius: 20,
-                fillColor: '#212529',
-                color: '#212529',
-                opacity: 1,
-                fillOpacity: 0.8
-            }),L.circleMarker([position.coords.latitude, position.coords.longitude],{
-                radius: 10,
-                fillColor: '#212529',
-                color: '#212529',
-                opacity: 1,
-                fillOpacity: 0.8
-            })]
-            nowPoint[0].addTo(myMap)
-            nowPoint[1].addTo(myMap)
+            nowPoint[0].setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude))
+            nowPoint[1].setLatLng(new L.LatLng(position.coords.latitude, position.coords.longitude))
       });
     } else {
 
@@ -189,7 +176,7 @@ const handleClick=(Element)=>{
         else if(dt.getHours()>17)
             hour=2
         
-        if(Element["properties"]["service_periods"][week+hour*7]=="N" &&dt.getHours()<21){
+        if(Element["properties"]["service_periods"][week+hour*7]=="N" &&dt.getHours()<21&&dt.getHours()>7){
             document.getElementsByClassName("btn-bot")[0].textContent="查看營業時間(營業中)"
             document.getElementsByClassName("btn-bot")[0].style.backgroundColor="rgb(41,171,164)"
             document.getElementsByClassName("btn-bot")[0].style.borderColor="rgb(41,171,164)"
@@ -260,7 +247,7 @@ const handleClick=(Element)=>{
 }
 
 const checkIsInZoom=()=>{
-    if(myMap.getZoom()>13){
+    if(myMap.getZoom()>12){
         markerList.forEach((Element,Index)=>{
         //myMap.setCenter(test)
             if(myMap.getBounds().contains(Element.getLatLng())){
