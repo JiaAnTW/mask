@@ -1,4 +1,4 @@
-html,.card,.info-area span,.btn-bot,table,.modal-title{
+html,.card,.info-area span,.btn-bot,table,.modal-title,.btn-dis,.btn-town{
     font-family: "Microsoft JhengHei";
 }
 
@@ -242,4 +242,54 @@ table{
     background-color: white;
     padding: 20px 20px;
     border-radius: 5px;   
+}
+
+.option-area2{
+    bottom: 150px;
+}
+
+#outbox{
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(242,153,75);
+    width: 25px;
+    height: 25px;
+    /* border: 2px solid rgb(242,153,75); */
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+#inbox1{
+    width: 2.5px;
+    height: 100%;
+    background-color: white;
+    margin-top: 0;
+}
+
+#inbox2{
+    width: 100%;
+    position: absolute;
+    height: 2px;
+    background-color: white;
+}
+
+.btn-dis{
+    background-color: rgb(242,153,75);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin: 5px;
+    outline: none;
+}
+
+.btn-town{
+    background-color: #ef5285;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    margin: 5px;
+    outline: none;
 }
