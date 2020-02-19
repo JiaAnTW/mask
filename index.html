@@ -16,7 +16,7 @@
 </head>
 <body >
     <div id="root" >
-        <div class="shade">
+        <div class="shade timeShade">
             <div class="content-box">
                 <div class="content-header">
                     <h5 class="modal-title" style="margin-right: 2rem;">Modal title</h5>
@@ -44,6 +44,19 @@
                                 <tr class="time"></tr>
                             </tbody>
                         </table>
+                </div>
+            </div>
+        </div>
+        <div class="shade disShade">
+            <div class="content-box">
+                <div class="content-header">
+                    <button type="button" class="close" onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="content">
+                    <div class="firstSelect"></div>
+                    <div class="SecondSelect"></div>
                 </div>
             </div>
         </div>
@@ -86,6 +99,12 @@
             <div id="staright-line"></div>
             <div id="line"></div>
             <div id="circle"><div id="circle-in"></div></div>
+        </button>
+        <button onclick="openDis()" class="option-area option-area2">
+            <div id="outbox">
+                <div id="inbox1"></div>
+                <div id="inbox2"></div>
+            </div>
         </button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>

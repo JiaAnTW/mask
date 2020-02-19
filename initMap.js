@@ -13,28 +13,28 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(myMap);
 
 var blueIcon = L.icon({
-    iconUrl: 'https://i.imgur.com/bJbfHdf.png',
-    iconSize:     [16, 27.5], // size of the icon
-    iconAnchor:   [8, 27.5], // point of the icon which will correspond to marker's location
+    iconUrl: 'https://i.imgur.com/uKaO6yU.png',
+    iconSize:     [19.2, 33], // size of the icon
+    iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 var greenIcon = L.icon({
-    iconUrl: 'https://i.imgur.com/nBNymm3.png',
+    iconUrl: 'https://i.imgur.com/BRfXYxR.png',
     iconSize:     [19.2, 33], // size of the icon
     iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 var yellowIcon = L.icon({
-    iconUrl: 'https://i.imgur.com/nHKXMQa.png',
+    iconUrl: 'https://i.imgur.com/obNiBmx.png',
     iconSize:     [19.2, 33], // size of the icon
     iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 var redIcon = L.icon({
-    iconUrl: 'https://i.imgur.com/KEfkAbV.png',
+    iconUrl: 'https://i.imgur.com/BnkTq5v.png',
     iconSize:     [19.2, 33], // size of the icon
     iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
@@ -92,6 +92,7 @@ const backToCenter=()=>{
 const closeCard=()=>{
     $(".info-card").hide()
     document.getElementsByClassName("option-area")[0].style.bottom="70px"; 
+    document.getElementsByClassName("option-area")[1].style.bottom="150px";
 }
 
 const openGoogleMap=()=>{
@@ -104,12 +105,13 @@ const closeModal=()=>{
     
     $(".shade").fadeOut("slow",()=>{
         document.getElementsByClassName("shade")[0].style.zIndex=0
+        document.getElementsByClassName("shade")[1].style.zIndex=0
     })
 }
 document.getElementsByClassName("shade")[0].addEventListener("click",closeModal)
 const openModal=()=>{
-    document.getElementsByClassName("shade")[0].style.zIndex=5
-    $(".shade").fadeIn("slow")
+    document.getElementsByClassName("timeShade")[0].style.zIndex=5
+    $(".timeShade").fadeIn("slow")
 }
 
 function getData(){
@@ -128,18 +130,18 @@ function getData(){
                         myMap.setView([Element["geometry"]["coordinates"][1]-0.005,Element["geometry"]["coordinates"][0]],15);
                     else
                         myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],15);
-                    nowPoint=[L.circleMarker([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],{
-                        radius: 20,
-                        fillColor: 'rgb(242,153,75)',
-                        color: 'rgb(242,153,75)',
-                        opacity: 1,
-                        fillOpacity: 0.8
-                    }),L.circleMarker([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],{
-                        radius: 10,
-                        fillColor: 'rgb(242,153,75)',
-                        color: 'rgb(242,153,75)',
-                        opacity: 1,
-                        fillOpacity: 0.8
+                    nowPoint=[L.circleMarker([position.coords.latitude, position.coords.longitude],{
+                            radius: 20,
+                            fillColor: '#212529',
+                            color: '#212529',
+                            opacity: 1,
+                            fillOpacity: 0.8
+                        }),L.circleMarker([position.coords.latitude, position.coords.longitude],{
+                            radius: 10,
+                            fillColor: '#212529',
+                            color: '#212529',
+                            opacity: 1,
+                            fillOpacity: 0.8
                     })]
                     nowPoint[0].addTo(myMap)
                     nowPoint[1].addTo(myMap)
@@ -237,8 +239,10 @@ function getData(){
                 
                  
                 $(".card-body").show(()=>{
-                    if(window.innerWidth<674)
+                    if(window.innerWidth<674){
                         document.getElementsByClassName("option-area")[0].style.bottom="350px";
+                        document.getElementsByClassName("option-area")[1].style.bottom="430px";
+                    }
                 })
                 handlePointChange()
 
@@ -281,9 +285,11 @@ function getData(){
 
 getData()
 
+var disData;
+
 function getDisData(){
     $.ajax({
-        url: "https://quality.data.gov.tw/dq_download_json.php?nid=25489&md5_url=ab48007db9f630e51fec0cb608e32d61", //請求的url地址
+        url: "https://raw.githubusercontent.com/jiaantw/mask/master/dist.json", //請求的url地址
         dataType: "json", //返回格式為json
         async: true, //請求是否非同步，預設為非同步，這也是ajax重要特性
         type: "GET", //請求方式
@@ -291,8 +297,36 @@ function getDisData(){
         //請求前的處理
         },
         success: function(data) {
-            console.log(data)
+                disData=data;
         }
     })
 }
+
+
 getDisData()
+const openNextDis=(Index)=>{
+    $(".btn-dis").css("backgroundColor","rgba(242,153,75,0.5)");
+    document.getElementsByClassName("btn-dis")[Index].style.backgroundColor="rgb(242,153,75)"
+    code=disData[disData["cityList"][Index]].map(Element=>{
+        return '<button class="btn-town" onclick="setAndClose('+Element["lat"]+","+Element["lon"]+')">'+Element["name"]+"</button>"
+    })
+    document.getElementsByClassName("SecondSelect")[0].innerHTML=code.join("")
+}
+
+
+const openDis=()=>{
+    code=disData["cityList"].map((Element,Index)=>{
+        return '<button class="btn-dis" onclick="openNextDis('+Index+')">'+Element+"</button>"
+    })
+    document.getElementsByClassName("firstSelect")[0].innerHTML=code.join("")
+    document.getElementsByClassName("disShade")[0].style.zIndex=5
+    $(".disShade").fadeIn("slow")
+    document.getElementsByClassName("SecondSelect")[0].innerHTML=""
+}
+
+
+
+const setAndClose=(lat,lon)=>{
+    myMap.setView([lat, lon],15);
+    closeModal()
+}
