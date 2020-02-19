@@ -124,8 +124,9 @@ html,.card,.info-area span,.btn-bot,table,.modal-title{
     align-items: center;
     background-color: white;
     padding: 10px 15px;
-    border-radius: 0px 0px 0px 5px;
+    border-radius: 5px 5px 0px 0px;
     border: 1px solid rgba(0,0,0,.125);
+    z-index: 2;
 }
 
 .info-area img{

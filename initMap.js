@@ -1,6 +1,7 @@
 var myMap = L.map('mapid', {
-    center: [22.73444963475145, 120.28458595275877],
-    zoom: 14
+    center: [22.995115, 120.21826039999999],
+    zoom: 14,
+    renderer: L.svg()
 });
 
 var dt = new Date();
@@ -13,29 +14,29 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var blueIcon = L.icon({
     iconUrl: 'https://i.imgur.com/bJbfHdf.png',
-    iconSize:     [32, 55], // size of the icon
-    iconAnchor:   [16, 55], // point of the icon which will correspond to marker's location
+    iconSize:     [16, 27.5], // size of the icon
+    iconAnchor:   [8, 27.5], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 var greenIcon = L.icon({
     iconUrl: 'https://i.imgur.com/nBNymm3.png',
-    iconSize:     [32, 55], // size of the icon
-    iconAnchor:   [16, 55], // point of the icon which will correspond to marker's location
+    iconSize:     [19.2, 33], // size of the icon
+    iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 var yellowIcon = L.icon({
     iconUrl: 'https://i.imgur.com/nHKXMQa.png',
-    iconSize:     [32, 55], // size of the icon
-    iconAnchor:   [16, 55], // point of the icon which will correspond to marker's location
+    iconSize:     [19.2, 33], // size of the icon
+    iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
 var redIcon = L.icon({
     iconUrl: 'https://i.imgur.com/KEfkAbV.png',
-    iconSize:     [32, 55], // size of the icon
-    iconAnchor:   [16, 55], // point of the icon which will correspond to marker's location
+    iconSize:     [19.2, 33], // size of the icon
+    iconAnchor:   [9.6, 33], // point of the icon which will correspond to marker's location
     popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
 });
 
@@ -47,6 +48,7 @@ var markerOptions = {
 };
 
 var centerPoint=null
+
 function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position)=>{
@@ -74,10 +76,13 @@ function getLocation() {
 getLocation()
 
 const backToCenter=()=>{
-    if(centerPoint!=null){
+    if(centerPoint!=null){     
         nowPoint[0].setLatLng(new L.LatLng(centerPoint[0], centerPoint[1]))
         nowPoint[1].setLatLng(new L.LatLng(centerPoint[0], centerPoint[1]))
-        myMap.panTo(centerPoint)
+        if(window.innerWidth<674)
+            myMap.setView([centerPoint[0]-0.005,centerPoint[1]],15);
+        else
+            myMap.setView(centerPoint,15);
     }
         
     else
@@ -120,9 +125,9 @@ function getData(){
             const handleClick=(Element)=>{
                 if(nowPoint==null){
                     if(window.innerWidth<674)
-                        myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],18);
+                        myMap.setView([Element["geometry"]["coordinates"][1]-0.005,Element["geometry"]["coordinates"][0]],15);
                     else
-                        myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],18);
+                        myMap.setView([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],15);
                     nowPoint=[L.circleMarker([Element["geometry"]["coordinates"][1],Element["geometry"]["coordinates"][0]],{
                         radius: 20,
                         fillColor: 'rgb(242,153,75)',
@@ -144,11 +149,11 @@ function getData(){
                 if(window.innerWidth<674)
                     myMap.panTo(new L.LatLng(Element["geometry"]["coordinates"][1]-0.005, Element["geometry"]["coordinates"][0]))
                 else
-                myMap.panTo(new L.LatLng(Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]))
+                    myMap.panTo(new L.LatLng(Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]))
                 const handlePointChange=()=>{
                     document.getElementsByClassName("card-title")[0].textContent=Element["properties"]["name"];
                     document.getElementsByClassName("card-subtitle")[0].textContent=Element["properties"]["address"];
-                    /*let realNote=""
+                    let realNote=""
                     if(Element["properties"]["note"]!="-"){
                     for(let i=0;i<Element["properties"]["note"].length;++i){
                             if((Element["properties"]["note"][i]>="0" && Element["properties"]["note"][i]<="9")
@@ -157,9 +162,9 @@ function getData(){
                             else
                                 realNote+=  Element["properties"]["note"][i]
                         }
-                    }*/
+                    }
 
-                    document.getElementsByClassName("card-text")[0].innerHTML=Element["properties"]["note"]
+                    document.getElementsByClassName("card-text")[0].innerHTML=realNote
                     document.getElementsByClassName("btn-bot")[1].value = "https://www.google.com/maps/search/?api=1&query="+Element["properties"]["county"]+Element["properties"]["name"];
                     document.getElementById("tel").textContent=Element["properties"]["phone"];
 
@@ -171,14 +176,14 @@ function getData(){
                     else if(dt.getHours()>17)
                         hour=2
                     
-                    if(Element["properties"]["service_periods"][week*3+hour]=="N" &&dt.getHours()<21){
+                    if(Element["properties"]["service_periods"][week+hour*7]=="N" &&dt.getHours()<21){
                         document.getElementsByClassName("btn-bot")[0].textContent="查看營業時間(營業中)"
                         document.getElementsByClassName("btn-bot")[0].style.backgroundColor="rgb(41,171,164)"
                         document.getElementsByClassName("btn-bot")[0].style.borderColor="rgb(41,171,164)"
                     }
                     else{
-                        console.log(Element["properties"]["service_periods"])
-                        console.log(dt.getHours())
+                        //console.log(Element["properties"]["service_periods"])
+                        //console.log(dt.getHours())
                         document.getElementsByClassName("btn-bot")[0].textContent="查看營業時間(休業中)"
                         document.getElementsByClassName("btn-bot")[0].style.backgroundColor="#ef5285"
                         document.getElementsByClassName("btn-bot")[0].style.borderColor="#ef5285"
@@ -243,7 +248,7 @@ function getData(){
 
             data["features"].forEach((Element,Index)=>{
                     //myMap.setCenter(test)
-                    if(Element["properties"]["note"].indexOf("號碼")!=-1)
+                    if(Element["properties"]["note"].indexOf("號")!=-1)
                         L.marker([Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]], {icon: blueIcon}).addTo(myMap).on("click",()=>{handleClick(Element)});
                     else if(Element["properties"]["mask_adult"]>50)
                         L.marker([Element["geometry"]["coordinates"][1], Element["geometry"]["coordinates"][0]], {icon: greenIcon}).addTo(myMap).on("click",()=>{handleClick(Element)});
@@ -275,3 +280,19 @@ function getData(){
 }
 
 getData()
+
+function getDisData(){
+    $.ajax({
+        url: "https://quality.data.gov.tw/dq_download_json.php?nid=25489&md5_url=ab48007db9f630e51fec0cb608e32d61", //請求的url地址
+        dataType: "json", //返回格式為json
+        async: true, //請求是否非同步，預設為非同步，這也是ajax重要特性
+        type: "GET", //請求方式
+        beforeSend: function() {
+        //請求前的處理
+        },
+        success: function(data) {
+            console.log(data)
+        }
+    })
+}
+getDisData()
