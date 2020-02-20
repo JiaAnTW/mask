@@ -157,7 +157,7 @@ const handleClick=(Element)=>{
         if(Element["properties"]["note"]!="-"){
         for(let i=0;i<Element["properties"]["note"].length;++i){
                 if((Element["properties"]["note"][i]>="0" && Element["properties"]["note"][i]<="9")
-                ||Element["properties"]["note"][i]==":" ||Element["properties"]["note"][i]=="點")
+                ||Element["properties"]["note"][i]==":" )
                     realNote+= "<strong>"+Element["properties"]["note"][i]+"</strong>"
                 else
                     realNote+=  Element["properties"]["note"][i]

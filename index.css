@@ -94,6 +94,7 @@ html,.card,.info-area span,.btn-bot,table,.modal-title,.btn-dis,.btn-town{
     height: 100vh;
     border: none;
     z-index: 1;
+    overscroll-behavior-y: contain;
 }
 
 .option-area{
