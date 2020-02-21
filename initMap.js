@@ -250,14 +250,17 @@ const checkIsInZoom=()=>{
     markerList.forEach((Element,Index)=>{
         //myMap.setCenter(test)if(myMap.getZoom()>12){
             if(myMap.getZoom()>12 && myMap.getBounds().contains(Element.getLatLng())){
-                if(!beforeBound.contains(Element.getLatLng())||beforeBound==null)
+                if(beforeBound==null||!beforeBound.contains(Element.getLatLng()))
                     Element.addTo(myMap)
             }
-            else if(beforeBound.contains(Element.getLatLng())&&beforeBound!=null){
+            else if(beforeBound!=null&&beforeBound.contains(Element.getLatLng())){
                 myMap.removeLayer(Element)
             }      
         })
-    beforeBound=myMap.getBounds()
+    if(myMap.getZoom()>12)
+        beforeBound=myMap.getBounds()
+    else
+        beforeBound=null
 }
 
 
